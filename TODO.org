@@ -1,3 +1,4 @@
 * TODO
-** DONE Improve comments for count_chars2.go
+** Improve comments for codeeval45.py
+** Improve comments for count_chars2.go
 ** Add sort-heap.go
