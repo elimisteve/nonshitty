@@ -5,8 +5,8 @@ package main
 
 import (
 	"fmt"
-	"http"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -15,7 +15,7 @@ import (
 // Save scraped data here. Must end with a '/' (e.g., "some_dir/")
 const SCRAPES_DIR = "scraped_sites/"
 
-func somethingBroke(err os.Error) bool {
+func somethingBroke(err error) bool {
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		return true
@@ -26,7 +26,7 @@ func somethingBroke(err os.Error) bool {
 // scrape scrapes the given URL and saves it to disk
 func scrape(url string, done chan bool) {
 	// Notify main when we're done right after we return
-	defer func() { done <-true }() // Anonymous functions ftw!
+	defer func() { done <- true }() // Anonymous functions ftw!
 
 	fmt.Printf("Scraping %s...\n", url)
 	defer fmt.Printf("Finished scraping %s\n", url)
@@ -47,13 +47,12 @@ func scrape(url string, done chan bool) {
 
 	// Write contents to disk. TODO: Store URL, text data in a DB
 	url = strings.Replace(url, "/", "___", -1)
-	filename := fmt.Sprintf("%v-%v", url, time.Seconds())
-	err = ioutil.WriteFile(SCRAPES_DIR + filename, contents, 0644)
+	filename := fmt.Sprintf("%v-%v", url, time.Now())
+	err = ioutil.WriteFile(SCRAPES_DIR+filename, contents, 0644)
 	if somethingBroke(err) { return }
 
 	return
 }
-
 
 func main() {
 	os.Mkdir(SCRAPES_DIR, 0755)
