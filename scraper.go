@@ -42,8 +42,8 @@ func scrape(url string, done chan bool) {
 
 	// Save contents to variable
 	contents, err := ioutil.ReadAll(req.Body)
-	defer req.Body.Close()
 	if somethingBroke(err) { return }
+	defer req.Body.Close()
 
 	// Write contents to disk. TODO: Store URL, text data in a DB
 	url = strings.Replace(url, "/", "___", -1)
