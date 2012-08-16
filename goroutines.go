@@ -18,8 +18,10 @@ func intTripler(ch chan int, n int) {
 }
 
 func main() {
+    const ANSWER_FILE = "/tmp/answer"
+
     // Make a channel of ints
-    ch := make(chan int, 3)
+    ch := make(chan int)
     done := make(chan bool)
 
     // Spawn 3 goroutines (basically threads) to process data in background
@@ -33,11 +35,11 @@ func main() {
         x, y, z := <-c, <-c, <-c
         // Create string containing the answer; Write it to /tmp/answer
         str := fmt.Sprintf("%d + %d + %d = %d\n", x, y, z, x+y+z)
-        ioutil.WriteFile("/tmp/answer", []byte(str), 0644)
+        ioutil.WriteFile(ANSWER_FILE, []byte(str), 0644)
         done <- true // Signal to main() that we're done here
     }(ch)
 
     // Don't exit until value received on channel, then discard it
     <-done
-    fmt.Printf("Find the calculated answer in /tmp/answer\n")
+    fmt.Printf("Find the calculated answer in %s\n", ANSWER_FILE)
 }
