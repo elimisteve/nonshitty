@@ -10,12 +10,12 @@ func MergeSort(numbers []int) []int {
 	if length < 2 {
 		return numbers
 	}
-	left  := MergeSort( numbers[:length/2] )
-	right := MergeSort( numbers[length/2:] )
+	left := MergeSort(numbers[:length/2])
+	right := MergeSort(numbers[length/2:])
 	// left and right are now sorted. Time to merge.
 
 	sorted := []int{}
-	l, r := 0, 0  // left and right indices/"indexes"
+	l, r := 0, 0 // left and right indices/"indexes"
 	for {
 		if left[l] < right[r] {
 			sorted = append(sorted, left[l])
